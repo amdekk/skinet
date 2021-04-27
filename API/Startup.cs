@@ -1,3 +1,4 @@
+using API.Helpers;
 using Core.Interfaces;
 using Infrastructure;
 using Infrastructure.Data;
@@ -29,6 +30,10 @@ namespace API
 
             services.AddScoped<IProductRepository, ProductRepository>();
 
+            services.AddAutoMapper(typeof(MappingProfiles));
+
+            services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
+
             services.AddDbContext<StoreContext>(x => x.UseSqlServer(_config.GetConnectionString("DefaultConnection")));
 
             services.AddSwaggerGen(c =>
@@ -50,6 +55,8 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 
