@@ -12,9 +12,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[Controller]")]
-    public class ProductsController : ControllerBase
+    
+    public class ProductsController : BaseApiController
     {
         private readonly IGenericRepository<Product> _products;
         private readonly IGenericRepository<ProductBrand> _productrands;
@@ -30,9 +29,9 @@ namespace API.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts()
+        public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts([FromQuery]ProductSpecParams productParams)
         { 
-            var spec = new PoductWithTypesAndBrandsSpecification();
+            var spec = new PoductWithTypesAndBrandsSpecification(productParams);
             var products = await _products.ListAsync(spec);
             
             return Ok(_mapper
